@@ -24,13 +24,13 @@ A Docker image and deployment script for deploying a Rails application that uses
 
 ## How to use this repository
 
-Add [deploy.sh](./deploy.sh) and [test-deploy.sh](./deploy.sh) to a directory of your choosing within your Rails project, e.g. `bin`.
+You can add the files in this repository to your application by either copying and pasting them or by including this repository as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
-Add the [Dockerfile](./Dockerfile) to a directory of your choosing with your Rails project, e.g. `docker/deploy`. Unfortunately, if you place this file in the root of your project, Google App Engine will interpret it as a custom image for running your application.
+> If you place the Dockerfile in the root directory of your project, Google App Engine will treat it as a custom image for hosting your application, which is likely not what you want.
 
-Encrypt your Google Cloud credentials [as described by Codeship](https://documentation.codeship.com/pro/continuous-deployment/google-cloud/#authentication) and add the resulting file to your project.
+After adding the files to your application, encrypt your Google Cloud credentials [as described by Codeship](https://documentation.codeship.com/pro/continuous-deployment/google-cloud/#authentication) and add the resulting file to your project.
 
-If you haven't done so already, create a file called `codeship-services.yml` in the root folder of your project. Add the following to this file:
+Next, if you haven't done so already, create a file called `codeship-services.yml` in the root folder of your project. Add the following to this file:
 
 ```yaml
 # Create a Codeship service called deploy. This is the environment in which
