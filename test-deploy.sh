@@ -17,7 +17,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=/keyconfig.json
 
 # Switch directories to /deploy, which contains your application (including
 # app.yaml, the Google App Engine configuration file).
-cd /deploy/
+cd /deploy
 
 # Running `gcloud app deploy` causes your application's static assets to be
 # compiled. We test this command here.
