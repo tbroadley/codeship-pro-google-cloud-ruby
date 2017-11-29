@@ -37,7 +37,7 @@ Next, if you haven't done so already, create a file called `codeship-services.ym
 # your application's deployment step will run.
 deploy:
 
-  # Build a Docker image
+  # Build a Docker image from the provided Dockerfile.
   build:
 
     # The path to the Dockerfile that you added to your project earlier.
