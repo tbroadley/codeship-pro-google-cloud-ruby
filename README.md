@@ -24,7 +24,7 @@ A Docker image and deployment script for deploying a Rails application that uses
 
 ## How to use this repository
 
-You can add the files in this repository to your application by either copying and pasting them or by including this repository as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
+You can add the files in this repository to your application either by copying and pasting them or by including this repository as a [submodule](https://git-scm.com/book/en/v2/Git-Tools-Submodules).
 
 > If you place the Dockerfile in the root directory of your project, Google App Engine will treat it as a custom image for hosting your application, which is likely not what you want.
 
