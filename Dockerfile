@@ -1,19 +1,19 @@
+# Start with Codeship's Docker image for deploying to Google Cloud.
 FROM codeship/google-cloud-deployment
 
-### Install buildpack-deps
-
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		ca-certificates \
-		curl \
-		wget \
-	&& rm -rf /var/lib/apt/lists/*
-
-RUN set -ex; \
-	apt-get update; \
+# Install libraries and command-line tools that are required to build Ruby.
+# Adapted from:
+# https://github.com/docker-library/buildpack-deps/blob/d7da72aaf3bb93fecf5fcb7c6ff154cb0c55d1d1/jessie/Dockerfile
+# https://github.com/docker-library/buildpack-deps/blob/d662dc69f910feb241f6d0c9d2cd6cc2fb6c5e6c/jessie/curl/Dockerfile
+RUN \
+	set -ex && \
+	apt-get update && \
 	apt-get install -y --no-install-recommends \
 		autoconf \
 		automake \
 		bzip2 \
+		ca-certificates \
+		curl \
 		dpkg-dev \
 		file \
 		g++ \
@@ -47,6 +47,7 @@ RUN set -ex; \
 		libyaml-dev \
 		make \
 		patch \
+		wget \
 		xz-utils \
 		zlib1g-dev \
 		\
@@ -59,10 +60,12 @@ RUN set -ex; \
 				echo 'libmysqlclient-dev'; \
 			fi \
 		) \
-	; \
+	&& \
 	rm -rf /var/lib/apt/lists/*
 
-### Install Ruby and Bundler
+# Install Ruby and Bundler
+# Adapted from:
+# https://github.com/docker-library/ruby/blob/73d3ed6b06738a7457a24fba9024cad303829c0a/2.4/jessie/Dockerfile
 
 # skip installing gem documentation
 RUN mkdir -p /usr/local/etc \
@@ -137,14 +140,17 @@ ENV PATH $BUNDLE_BIN:$PATH
 RUN mkdir -p "$GEM_HOME" "$BUNDLE_BIN" \
 	&& chmod 777 "$GEM_HOME" "$BUNDLE_BIN"
 
-### Set up Google Cloud SQL proxy
-
+# Set up the Cloud SQL Proxy.
 RUN \
 	wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 && \
 	chmod +x cloud_sql_proxy.linux.amd64 && \
 	mv cloud_sql_proxy.linux.amd64 /usr/local/bin/cloud-sql-proxy && \
 	mkdir /cloudsql
 
+# Run `bundle install` on your application's Gemfile so that its gems will be
+# stored in the Docker image. This speeds up builds when your application's
+# Gemfile doesn't change, since it can cache the intermediate results of the
+# ADD commands and of the subsequent RUN command.
 WORKDIR /tmp
 ADD ./Gemfile Gemfile
 ADD ./Gemfile.lock Gemfile.lock
