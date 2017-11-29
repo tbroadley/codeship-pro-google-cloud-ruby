@@ -1,21 +1,35 @@
 #!/bin/bash
 
+# Exit immediately if any of the following commands exits with a non-zero
+# status. This means that the Codeship build will fail as soon as one of the
+# commands below fails.
 set -e
 
-# Authenticate with the Google Services
+# Authenticate with Google Cloud using the credentials stored in your
+# application's repository.
 codeship_google authenticate
+
+# `codeship_google authenticate` writes the decrypted Google Cloud credentials
+# to /keyconfig.json. We specify the GOOGLE_APPLICATION_CREDENTIALS environment
+# variable so that the Cloud SQL Proxy can connect to your application's
+# production database.
 export GOOGLE_APPLICATION_CREDENTIALS=/keyconfig.json
 
-# switch to the directory containing your app.yml (or similar) configuration file
-# note that your repository is mounted as a volume to the /deploy directory
-cd /deploy/
+# Switch directories to /deploy, which contains your application (including
+# app.yaml, the Google App Engine configuration file).
+cd /deploy
 
-# deploy the application
+# Deploy the application to Google App Engine. The --quiet option is passed to
+# prevent `gcloud` from prompting for input during the execution of the
+# command.
 gcloud app deploy --quiet
 
-# start the Google Cloud SQL proxy
+# Start the Cloud SQL Proxy, writing logs to a log file.
 cloud-sql-proxy -dir /cloudsql > log/cloudsql.log 2>&1 &
+
+# Read the Cloud SQL Proxy log file until a line containing "Ready for new
+# connections" is found. Then, continue to the next line.
 (tail -f log/cloudsql.log &) | sed '/Ready for new connections/q'
 
-# migrate the database
-DB_ADMIN=true RAILS_ENV=production rake db:migrate
+# Migrate the production database.
+rake db:migrate RAILS_ENV=production
