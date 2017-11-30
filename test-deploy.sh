@@ -40,4 +40,4 @@ RAILS_ENV=production rake db:version
 DB_ADMIN=true RAILS_ENV=production rake db:version
 
 # Perform a dry run of the pending migrations against the production database.
-DB_ADMIN=true RAILS_ENV=production rake db:migrate
+DB_ADMIN=true RAILS_ENV=production rake db:migrate --dry-run
