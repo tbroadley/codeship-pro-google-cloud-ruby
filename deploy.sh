@@ -31,5 +31,8 @@ cloud-sql-proxy -dir /cloudsql > log/cloudsql.log 2>&1 &
 # connections" is found. Then, continue to the next line.
 (tail -f log/cloudsql.log &) | sed '/Ready for new connections/q'
 
-# Migrate the production database.
-rake db:migrate RAILS_ENV=production
+# Migrate the production database. Set the DB_ADMIN environment variable to
+# indicate that the command should connect to the database using a user that
+# has sufficient privileges to migrate the database:
+# http://jldbasa.github.io/blog/2014/02/14/mysql-user-minimum-required-privileges-for-rails/
+DB_ADMIN=true RAILS_ENV=production rake db:migrate
