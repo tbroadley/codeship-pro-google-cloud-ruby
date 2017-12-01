@@ -37,7 +37,7 @@ for (( i = 0; i < 10; i++ )); do
   # Cloud SQL Proxy is ready to access the production database.
   if cat log/cloudsql.log | grep -q 'Ready for new connections'; then
 
-    echo "Connected to the production database."
+    echo "Ready to connect to the production database."
 
     # Try to connect to the production database.
     RAILS_ENV=production rake db:version
