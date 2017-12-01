@@ -28,7 +28,7 @@ cloud-sql-proxy -dir /cloudsql > log/cloudsql.log 2>&1 &
 
 # Set cloud_sql_proxy_pid to the PID of the last command, i.e. running
 # cloud-sql-proxy.
-cloud_sql_proxy_pid = $!
+cloud_sql_proxy_pid=$!
 
 # Loop while the Cloud SQL Proxy is still running.
 while kill -0 $cloud_sql_proxy_pid; do
