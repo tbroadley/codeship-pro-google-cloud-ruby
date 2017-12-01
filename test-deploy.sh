@@ -30,8 +30,8 @@ cloud-sql-proxy -dir /cloudsql > log/cloudsql.log 2>&1 &
 # cloud-sql-proxy.
 cloud_sql_proxy_pid=$!
 
-# Loop while the Cloud SQL Proxy is still running.
-while kill -0 $cloud_sql_proxy_pid; do
+# Time out after 10 seconds.
+for (( i = 0; i < 10; i++ )); do
 
   # If the Cloud SQL Proxy log file contains 'Ready for new connections', the
   # Cloud SQL Proxy is ready to access the production database.
