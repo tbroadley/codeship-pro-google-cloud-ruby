@@ -37,6 +37,8 @@ for (( i = 0; i < 10; i++ )); do
   # Cloud SQL Proxy is ready to access the production database.
   if cat log/cloudsql.log | grep -q 'Ready for new connections'; then
 
+    echo "Connected to the production database."
+
     # Try to connect to the production database.
     RAILS_ENV=production rake db:version
 
@@ -56,6 +58,8 @@ for (( i = 0; i < 10; i++ )); do
   sleep 1
 
 done
+
+echo "Cloud SQL Proxy didn't connect to the production database within 10 seconds. Timing out..."
 
 # If the Cloud SQL Proxy exited, indicate that there is an error.
 exit 1
