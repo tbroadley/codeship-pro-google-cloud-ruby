@@ -147,6 +147,15 @@ RUN \
 	mv cloud_sql_proxy.linux.amd64 /usr/local/bin/cloud-sql-proxy && \
 	mkdir /cloudsql
 
+# install NPM and Yarn
+ADD https://dl.yarnpkg.com/debian/pubkey.gpg /tmp/yarn-pubkey.gpg
+RUN apt-key add /tmp/yarn-pubkey.gpg && rm /tmp/yarn-pubkey.gpg
+RUN echo 'deb http://dl.yarnpkg.com/debian/ stable main' > /etc/apt/sources.list.d/yarn.list
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      build-essential libpq-dev curl
+RUN curl -sL https://deb.nodesource.com/setup_6.x | bash -
+RUN apt-get update && apt-get install -y --no-install-recommends nodejs yarn
+
 # Run `bundle install` on your application's Gemfile so that its gems will be
 # stored in the Docker image. This speeds up builds when your application's
 # Gemfile doesn't change, since it can cache the intermediate results of the
