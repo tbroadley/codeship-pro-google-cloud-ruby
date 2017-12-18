@@ -164,3 +164,10 @@ WORKDIR /tmp
 ADD ./Gemfile Gemfile
 ADD ./Gemfile.lock Gemfile.lock
 RUN bundle install --without development test
+
+WORKDIR /deploy
+ADD ./package.json package.json
+RUN npm install
+RUN yarn install
+
+ADD . ./
